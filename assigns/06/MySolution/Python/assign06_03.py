@@ -10,27 +10,41 @@ HX-2023-03-24: 20 points
 Solving the N-queen puzzle
 """
 ####################################################
-def solve_N_queen_puzzle(N):
-"""
-Please revisit assign04-04.sml.
-A board of size N is a tuple of length N.
-######
-For instance, a tuple (0, 0, 0, 0) stands
-for a board of size 4 (that is, a 4x4 board)
-where there are no queen pieces on the board.
-######
-For instance, a tuple (2, 1, 0, 0) stands
-for a board of size 4 (that is, a 4x4 board)
-where there are two queen pieces; the queen piece
-on the 1st row is on the 2nd column; the queen piece
-on the 2nd row is on the 1st column; the last two rows
-contain no queen pieces.
-######
-This function [solve_N_queen_puzzle] should return
-a stream of ALL the boards of size N that contain N
-queen pieces (one on each row and on each column) such
-that no queen piece on the board can catch any other ones
-on the same board.
-"""
-    raise NotImplementedError
+
+
+def initialize_board(size):
+    board = []
+    for i in range(size):
+        board.append(0)
+    return [board]
+
+def is_valid_placement(board, row, col):
+    for i in range(row):
+        if (board[i] == col or (abs(row - i) == abs(board[i] - col))):
+            return False
+    return True
+
+def get_children_boards(board, size):
+    children = []
+    row = 0
+    while row < size:
+        if board[row] != 0:
+            row += 1
+        else:
+            break
+    for col in range(1, size + 1):
+        if is_valid_placement(board, row, col):
+            new_board = board[:]
+            new_board[row] = col
+            children.append(new_board)
+    return children
+
+def solve_N_queen_puzzle(n):
+    initial_board = initialize_board(n)
+    search_tree = gtree_dfs(initial_board, lambda board: get_children_boards(board, n))
+    valid_boards = stream_make_filter(search_tree, lambda board: tuple(board) if board[-1] != 0 else None)
+    return valid_boards
+
+
+
 ####################################################
