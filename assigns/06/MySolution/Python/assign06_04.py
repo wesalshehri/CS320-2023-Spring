@@ -5,7 +5,15 @@ import sys
 sys.path.append('./../../../../mypylib')
 from mypylib_cls import *
 import queue
-import 
+import nltk
+nltk.download('words')
+from nltk.corpus import words
+################################################
+setofwords = set(words.words())
+################################################
+def word_is_legal(word):
+    return word in setofwords
+
 ####################################################
 """
 HX-2023-03-24: 30 points
