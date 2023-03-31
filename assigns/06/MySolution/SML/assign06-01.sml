@@ -26,3 +26,15 @@ val the_ln2_stream: real stream = fn() => ...
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-assign06-01.sml] *)
+
+
+
+val the_ln2_stream: real stream = fn() =>
+  let
+    fun partial_sum_helper(i, sgn, acc) =
+      strcon_cons(i, fn() => partial_sum_helper(i+sgn*1.0/acc,~sgn, acc+1.0))
+  in
+    partial_sum_helper(1.0,~1.0,2.0)
+  end
+
+
