@@ -20,3 +20,14 @@ val theNatPairs: (int*int) stream = fn () => ...
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-assign06-02.sml] *)
+
+
+val theNatPairs: (int*int) stream = fn () =>
+  let
+    fun helper1(n: int): (int*int) stream =
+      stream_tabulate((n+1), fn(i) => (i, (n-i)))
+
+    val helper2 = stream_tabulate(~1, fn(i) => helper1(i))
+  in
+    stream_concat(helper2)()
+  end
