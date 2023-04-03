@@ -733,6 +733,24 @@ type 'a stream = (unit -> 'a strcon)
 (* ****** ****** *)
 
 fun
+strcon_head
+(cxs: 'a strcon) =
+case cxs of
+strcon_nil => raise Empty
+|
+strcon_cons(cx1, fxs) => cx1
+
+fun
+strcon_tail
+(cxs: 'a strcon) =
+case cxs of
+strcon_nil => raise Empty
+|
+strcon_cons(cx1, fxs) => fxs
+
+(* ****** ****** *)
+
+fun
 stream_nil
 ((*void*)) =
   fn () => strcon_nil(*void*)
@@ -742,6 +760,17 @@ stream_cons
 , fxs
 : 'a stream) =
    fn () => strcon_cons(x1, fxs)
+
+(* ****** ****** *)
+
+fun
+stream_head
+( fxs
+: 'a stream) = strcon_head(fxs())
+fun
+stream_tail
+( fxs
+: 'a stream) = strcon_tail(fxs())
 
 (* ****** ****** *)
 
@@ -894,6 +923,10 @@ in
 end (* end-of-[stream_iforeach(fxs, iwork)] *)
 
 (* ****** ****** *)
+val
+stream_length = fn(fxs) =>
+foreach_to_length(stream_foreach)(fxs)
+(* ****** ****** *)
 
 fun
 stream_append
@@ -949,6 +982,51 @@ case fxs() of
   else
   strcon_cons(x1, stream_make_filter(fxs, test))
 )
+
+(* ****** ****** *)
+
+fun
+stream_make_imap
+( fxs: 'a stream
+, ifopr
+: int * 'a -> 'b) = fn () =>
+let
+(* ****** ****** *)
+fun
+helper(fxs, i0: int) = fn() =>
+case fxs() of
+strcon_nil =>
+strcon_nil(*void*)
+|
+strcon_cons(x1, fxs) =>
+strcon_cons
+( ifopr(i0, x1)
+, helper(fxs, i0+1)) in helper(fxs, 0)
+(* ****** ****** *)
+end (* end-of-[stream_make_imap(fxs, ifopr)] *)
+
+(* ****** ****** *)
+
+fun
+stream_make_ifilter
+( fxs: 'a stream
+, itest: int * 'a -> bool): 'a stream = fn () =>
+let
+(* ****** ****** *)
+fun
+helper
+(fxs, i0: int) = fn() =>
+case fxs() of
+strcon_nil => strcon_nil
+|
+strcon_cons(x1, fxs) =>
+if
+not(itest(i0, x1))
+then helper(fxs, i0+1)()
+else
+strcon_cons(x1, helper(fxs, i0+1)) in helper(fxs, 0)()
+(* ****** ****** *)
+end (* end-of-[stream_make_ifilter(fxs, ifopr)] *)
 
 (* ****** ****** *)
 
