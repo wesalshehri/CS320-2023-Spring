@@ -12,9 +12,5 @@ Please put your implementation here for quiz04-01
 
 val theAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-fun alphabeta_cycling_list(): char stream =
-  let
-    val alphabet_stream = string_streamize(theAlphabet)
-  in
-    stream_append(alphabet_stream, alphabeta_cycling_list())
-  end
+fun alphabeta_cycling_list(): char stream = fn() =>
+    stream_append(string_streamize(theAlphabet), alphabeta_cycling_list())()
