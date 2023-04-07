@@ -21,3 +21,18 @@ matrix.
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-assign07-01.sml] *)
+
+
+
+fun stream_ziplst(xs: 'a stream list): 'a list stream = fn() =>
+  let
+    fun helper(xs, i) =
+      strcon_cons(
+        list_foldright(xs, [], fn(y, temp) => stream_get_at(temp, i) :: y),
+        fn() => helper(xs, i + 1)
+      )
+      handle Subscript => strcon_nil
+  in
+    helper(xs, 0)
+  end
+
