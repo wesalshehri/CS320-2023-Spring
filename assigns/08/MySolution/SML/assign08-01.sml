@@ -19,3 +19,17 @@ stream_permute_list(xs: 'a list): 'a list stream = ...
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-assign08-01.sml] *)
+
+
+
+
+fun helper1(x, []) = [[x]]
+| helper1(x, (y::ys)) = (x::y::ys) :: list_map((helper1(x, ys)), (fn ys => y::ys))
+
+fun helper2([]) = list_streamize [[]]
+| helper2(x::xs) = stream_concat(stream_make_map(helper2 xs, fn x1 => list_streamize(helper1(x, x1))))
+
+fun stream_permute_list(xs: 'a list): 'a list stream = helper2 xs
+
+
+
