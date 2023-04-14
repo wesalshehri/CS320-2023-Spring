@@ -8,13 +8,21 @@ generator_merge2 WITHOUT using streams. A solution that
 uses streams is disqualified.
 """
 def generator_merge2(gen1, gen2, lte3):
-    """
-    Given two generators gen1 and gen2 and a comparison
-    function lte3, the function generator_merge2 returns
-    another generator that merges the elements produced by
-    gen1 and gen2 according to the order specified by lte3.
-    The function generator_merge2 is expected to work correctly
-    for both finite and infinite generators.
-    """
-    raise NotImplementedError
+    c1 = next(gen1,None)
+    c2 = next(gen2,None)
+
+    while c1 is not None or c2 is not None:
+        if c1 is None:
+            yield c2
+            c2 = next(gen2,None)
+        elif c2 is None:
+            yield c1
+            c1 = next(gen1,None)
+        elif lte3(c1, c2):
+            yield c1
+            c1 = next(gen1,None)
+        else:
+            yield c2
+            c2 = next(gen2,None)
+            
 ####################################################
