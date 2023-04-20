@@ -24,3 +24,13 @@ stream_zipstrm
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-midterm2-03.sml] *)
+
+
+fun helper(fxss, x) = strcon_cons(foreach_to_foldleft(stream_foreach)(fxss, fn() => strcon_nil, fn(x1, temp) => stream_append(x1, fn() => strcon_cons(stream_get_at(temp, x), fn() => strcon_nil))), fn() => helper(fxss, x+1)) handle Subscript => strcon_nil
+
+
+fun stream_zipstrm(fxss: 'a stream stream): 'a stream stream = fn() => helper(fxss, 0)
+
+
+
+
