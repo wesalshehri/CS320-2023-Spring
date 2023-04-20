@@ -33,3 +33,14 @@ stream_evaluate
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-midterm2-01.sml] *)
+
+
+
+fun pow_real_int(x:real, n:int) : real = if n = 0 then 1.0 else if n mod 2 = 0 then pow_real_int(x * x, n div 2) else x * pow_real_int(x * x, n div 2)
+
+
+fun helper(fxs, val0, n, x0) = fn() => case fxs() of strcon_nil => strcon_nil | strcon_cons(val1, temp) => let val val2 = val0 + val1 * pow_real_int(x0 ,n) in strcon_cons(val2, helper(temp, val2, n+1, x0)) end
+
+fun stream_evaluate(fxs: real stream, x0: real): real stream =  helper(fxs, 0.0, 0, x0)
+
+
