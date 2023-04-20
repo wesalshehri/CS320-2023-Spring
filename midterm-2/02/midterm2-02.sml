@@ -32,3 +32,21 @@ mytree_dfs_streamize(t0: 'a mytree): 'a stream = ...
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-midterm2-02.sml] *)
+
+
+
+
+fun mytree_dfs_streamize(t0: 'a mytree): 'a stream =
+    let
+        fun helper(mytree_node(x0, rest)) =
+            let
+                fun helper2(rest) =
+                    case rest of
+                        [] => stream_nil()
+                      | x::xs => stream_append(mytree_dfs_streamize(x), helper2(xs))
+            in
+                stream_cons(x0, fn () => helper2(rest)())
+            end
+    in
+        helper(t0)
+    end
