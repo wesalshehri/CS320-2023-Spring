@@ -44,3 +44,12 @@ perm_counting_out
 (* ****** ****** *)
 
 (* end of [CS320-2023-Spring-midterm2-06.sml] *)
+
+
+
+fun helper(x, [], k0, temp) = temp | helper(x, y::ys, k0, temp) = if x = k0 then helper(0, ys, k0, temp@[y])  else helper(x+1, ys@[y], k0, temp)
+
+fun perm_counting_out(xs, k0):int list = helper(0, xs, k0, [])
+
+
+
