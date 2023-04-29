@@ -28,5 +28,24 @@ wordle_hint(w1, w2) =
 """
 ########################################################################
 def wordle_hint(w1, w2):
-    raise NotImplementedError
+  x0 = []
+  x1 = []
+  x2 = []
+  for w in zip(w1, w2):
+    x3, x4 = w
+    if not x4 in x1:
+      x1.append(x4)
+      x2.append(w1.count(x4))
+      
+    x5 = x1.index(x4)
+    if(x3 == x4):
+        x0.append((1, x4))
+        x2[x5] -= 1
+    else:
+        if(x2[x5] == 0):
+          x0.append((0, x4))
+        else:
+          x0.append((2, x4))
+          
+  return x0
 ########################################################################
